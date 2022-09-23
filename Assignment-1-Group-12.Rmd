@@ -54,6 +54,9 @@ knitr::kable(t(table(auto$insurancetype)), caption = 'Frequency of the insurance
 empty.insurance.type <- which(auto$insurancetype == '', arr.ind = TRUE)
 print(paste('Insurance claim with empty insurance type:',
             empty.insurance.type))
+
+# Remove these observations from the sample
+auto <- auto[-c(17857,18515),]
 ```
 
 **Comment on question 1**
@@ -107,7 +110,7 @@ auto %>%
 
 # Question 4
 
-```{r question-4, echo = FALSE, results='asis'}
+```{r question-4, echo = FALSE}
 # Create 4 dummy variables
 auto$simplification <- ifelse(
   as.character(auto$treatmentgroup) == '1', 1, 0)
@@ -122,9 +125,15 @@ auto$accept_automatic <- as.numeric(as.character(auto$accept_automatic))
 
 linear.model <- lm(accept_automatic ~ simplification + personalization + 
                      social.norm + combined, auto)
-
-stargazer(linear.model, header = FALSE)
 ```
 
 # Question 5
+
+```{r question-5, echo = FALSE, results='asis'}
+linear.model.w.controls <-
+  lm(accept_automatic ~ simplification + personalization + social.norm + 
+       combined + insurancetype + red + green, auto)
+summary(linear.model.w.controls)
+stargazer(linear.model, linear.model.w.controls, header = FALSE)
+```
 
