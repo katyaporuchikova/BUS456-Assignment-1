@@ -107,3 +107,24 @@ auto %>%
 
 # Question 4
 
+```{r question-4, echo = FALSE, results='asis'}
+# Create 4 dummy variables
+auto$simplification <- ifelse(
+  as.character(auto$treatmentgroup) == '1', 1, 0)
+auto$personalization <- ifelse(
+  as.character(auto$treatmentgroup) == '2', 1, 0)
+auto$social.norm <- ifelse(
+  as.character(auto$treatmentgroup) == '3', 1, 0)
+auto$combined <- ifelse(
+  as.character(auto$treatmentgroup) == '4', 1, 0)
+
+auto$accept_automatic <- as.numeric(as.character(auto$accept_automatic))
+
+linear.model <- lm(accept_automatic ~ simplification + personalization + 
+                     social.norm + combined, auto)
+
+stargazer(linear.model, header = FALSE)
+```
+
+# Question 5
+
