@@ -1,0 +1,66 @@
+---
+title:    |
+          | Empirical problem set
+          | BUS456 Fall 2022
+author: |
+        | Group 12
+        | Ekaterina Poruchikova - s222650
+        | Add
+        | Add
+        | Add
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+\newpage
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo = FALSE, message = FALSE}
+library(stargazer) # Pretty statistics output
+library(purrr) # Iterations
+# library(dplyr) 
+```
+
+
+
+```{r, echo = FALSE}
+setwd('C:/Users/steef/Documents/NHH/BUS456 Behavioral Business Strategy/BUS456-Assignment-1')
+
+# Read the file
+auto <- read.csv('automated_anonymous.csv')
+```
+
+# Question 1
+
+```{r, echo = FALSE}
+# Transform to factor variables
+claiminternalnumber <- as.data.frame(auto[,1])
+names(claiminternalnumber)[names(claiminternalnumber) == 'auto[, 1]'] <- 
+  'claiminternalnumber'
+
+auto[,-1] %>%
+  map(as.factor) %>%
+  cbind(claiminternalnumber,.) -> auto
+rm(claiminternalnumber)
+
+knitr::kable(t(table(auto$claimcolour)), caption = 'Frequency of the claim colour')
+knitr::kable(t(table(auto$insurancetype)), caption = 'Frequency of the insurance type')
+
+# Find insurance claims with empty insurance types
+empty.insurance.type <- which(auto$insurancetype == '', arr.ind = TRUE)
+print(paste('Insurance claim with empty insurance type:',
+            empty.insurance.type))
+```
+
+**Comment on question 1**
+
+# Question 2
+
+```{r, echo = FALSE}
+
+
+```
+
