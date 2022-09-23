@@ -36,7 +36,7 @@ auto <- read.csv('automated_anonymous.csv')
 
 # Question 1
 
-```{r, echo = FALSE}
+```{r question-1, echo = FALSE}
 # Transform to factor variables
 claiminternalnumber <- as.data.frame(auto[,1])
 names(claiminternalnumber)[names(claiminternalnumber) == 'auto[, 1]'] <- 
@@ -60,7 +60,7 @@ print(paste('Insurance claim with empty insurance type:',
 
 # Question 2
 
-```{r, echo = FALSE}
+```{r question-2, echo = FALSE}
 auto$green <- ifelse(auto$claimcolour == 'Green', 1, 0)
 auto$yellow <- ifelse(auto$claimcolour == 'Yellow', 1, 0)
 auto$red <- ifelse(auto$claimcolour == 'Red', 1, 0)
@@ -85,4 +85,25 @@ auto %>% # Probably exclude empty ones *****************************************
 
 # Question 3
 
+
+```{r question-3, echo = FALSE}
+auto %>% 
+  group_by(treatmentgroup) %>%
+  summarise(
+    green = mean(green),
+    yellow = mean(yellow),
+    red = mean(red),
+    auto = mean(insurancetype == 'auto'),
+    life = mean(insurancetype == 'life'),
+    property = mean(insurancetype == 'property'),
+    travel = mean(insurancetype == 'travel'),
+    other = mean(insurancetype == 'other'),
+    privatefinanced = mean(as.numeric(as.character(privatefinanced)))
+  ) %>%
+  t(.) %>%
+  knitr::kable(caption = 'Title')
+
+```
+
+# Question 4
 
