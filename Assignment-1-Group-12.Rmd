@@ -21,7 +21,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries, echo = FALSE, message = FALSE}
 library(stargazer) # Pretty statistics output
 library(purrr) # Iterations
-# library(dplyr) 
+library(dplyr) 
+library(scales) # Turn decimals in %
 ```
 
 
@@ -60,7 +61,28 @@ print(paste('Insurance claim with empty insurance type:',
 # Question 2
 
 ```{r, echo = FALSE}
+auto$green <- ifelse(auto$claimcolour == 'Green', 1, 0)
+auto$yellow <- ifelse(auto$claimcolour == 'Yellow', 1, 0)
+auto$red <- ifelse(auto$claimcolour == 'Red', 1, 0)
 
+auto %>% # How to label as percentages? *******************************************************
+  summarise(
+    green = mean(green),
+    yellow = mean(yellow),
+    red = mean(red)
+  ) %>%
+  knitr::kable(caption = 'Percentage of claim color')
 
+auto %>% # Probably exclude empty ones *********************************************************
+  group_by(insurancetype) %>%
+  summarise(
+    green = mean(green),
+    yellow = mean(yellow),
+    red = mean(red)
+  ) %>%
+  knitr::kable(caption = 'Percentage of claim color by insurance type')
 ```
+
+# Question 3
+
 
