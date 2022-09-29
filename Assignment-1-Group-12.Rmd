@@ -68,6 +68,8 @@ auto$green <- ifelse(auto$claimcolour == 'Green', 1, 0)
 auto$yellow <- ifelse(auto$claimcolour == 'Yellow', 1, 0)
 auto$red <- ifelse(auto$claimcolour == 'Red', 1, 0)
 
+# EXCLUDE THE OTHER CATEGORY *************************************************************************
+
 auto %>% # How to label as percentages? *******************************************************
   summarise(
     green = mean(green),
@@ -132,8 +134,11 @@ linear.model <- lm(accept_automatic ~ simplification + personalization +
 ```{r question-5, echo = FALSE, results='asis'}
 linear.model.w.controls <-
   lm(accept_automatic ~ simplification + personalization + social.norm + 
-       combined + insurancetype + red + green, auto)
-summary(linear.model.w.controls)
+       combined + insurancetype + red + green + privatefinanced, auto)
 stargazer(linear.model, linear.model.w.controls, header = FALSE)
 ```
+
+# Question 6
+
+
 
