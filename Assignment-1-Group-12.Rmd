@@ -5,9 +5,9 @@ title:    |
 author: |
         | Group 12
         | Ekaterina Poruchikova - s222650
-        | Add
-        | Add
-        | Add
+        | Jhih-Jiuan Cheng - s222648
+        | Shuta Yamada - s222422
+        | Maximilian Sammeer - s222688
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
@@ -38,25 +38,30 @@ auto <- read.csv('automated_anonymous.csv')
 
 ```{r question-1, echo = FALSE}
 # Transform to factor variables
-claiminternalnumber <- as.data.frame(auto[,1])
-names(claiminternalnumber)[names(claiminternalnumber) == 'auto[, 1]'] <- 
+claiminternalnumber <- as.data.frame(auto[, 1])
+names(claiminternalnumber)[names(claiminternalnumber) == 'auto[, 1]'] <-
   'claiminternalnumber'
 
-auto[,-1] %>%
+auto[, -1] %>%
   map(as.factor) %>%
-  cbind(claiminternalnumber,.) -> auto
+  cbind(claiminternalnumber, .) -> auto
 rm(claiminternalnumber)
 
-knitr::kable(t(table(auto$claimcolour)), caption = 'Frequency of the claim colour')
-knitr::kable(t(table(auto$insurancetype)), caption = 'Frequency of the insurance type')
+knitr::kable(t(table(auto$claimcolour)),
+             caption = 'Frequency of the claim colour')
+knitr::kable(t(table(auto$insurancetype)),
+             caption = 'Frequency of the insurance type')
 
 # Find insurance claims with empty insurance types
-empty.insurance.type <- which(auto$insurancetype == '', arr.ind = TRUE)
-print(paste('Insurance claim with empty insurance type:',
-            empty.insurance.type))
+empty.insurance.type <-
+  which(auto$insurancetype == '', arr.ind = TRUE)
+print(paste(
+  'Insurance claim with empty insurance type:',
+  empty.insurance.type
+))
 
 # Remove these observations from the sample
-auto <- auto[-c(17857,18515),]
+auto <- auto[-c(17857, 18515), ]
 ```
 
 **Comment on question 1**
@@ -78,7 +83,7 @@ auto %>% # How to label as percentages? ****************************************
   ) %>%
   knitr::kable(caption = 'Percentage of claim color')
 
-auto %>% # Probably exclude empty ones *********************************************************
+auto %>% 
   group_by(insurancetype) %>%
   summarise(
     green = mean(green),
@@ -92,7 +97,7 @@ auto %>% # Probably exclude empty ones *****************************************
 
 
 ```{r question-3, echo = FALSE}
-auto %>% 
+auto %>%
   group_by(treatmentgroup) %>%
   summarise(
     green = mean(green),
@@ -114,19 +119,22 @@ auto %>%
 
 ```{r question-4, echo = FALSE}
 # Create 4 dummy variables
-auto$simplification <- ifelse(
-  as.character(auto$treatmentgroup) == '1', 1, 0)
-auto$personalization <- ifelse(
-  as.character(auto$treatmentgroup) == '2', 1, 0)
-auto$social.norm <- ifelse(
-  as.character(auto$treatmentgroup) == '3', 1, 0)
-auto$combined <- ifelse(
-  as.character(auto$treatmentgroup) == '4', 1, 0)
+auto$simplification <-
+  ifelse(as.character(auto$treatmentgroup) == '1', 1, 0)
+auto$personalization <-
+  ifelse(as.character(auto$treatmentgroup) == '2', 1, 0)
+auto$social.norm <-
+  ifelse(as.character(auto$treatmentgroup) == '3', 1, 0)
+auto$combined <-
+  ifelse(as.character(auto$treatmentgroup) == '4', 1, 0)
 
-auto$accept_automatic <- as.numeric(as.character(auto$accept_automatic))
+auto$accept_automatic <-
+  as.numeric(as.character(auto$accept_automatic))
 
-linear.model <- lm(accept_automatic ~ simplification + personalization + 
-                     social.norm + combined, auto)
+linear.model <-
+  lm(accept_automatic ~ simplification + personalization +
+       social.norm + combined,
+     auto)
 ```
 
 # Question 5
@@ -140,5 +148,28 @@ stargazer(linear.model, linear.model.w.controls, header = FALSE)
 
 # Question 6
 
+```{r question-6, echo = FALSE, results='asis'}
+auto %>%
+  filter(treatmentgroup == 0 | treatmentgroup == 4) %>%
+  filter(claimcolour == 'Green') %>%
+  lm(accept_automatic ~ combined, .) -> model.green
 
+auto %>%
+  filter(treatmentgroup == 0 | treatmentgroup == 4) %>%
+  filter(claimcolour == 'Yellow') %>%
+  lm(accept_automatic ~ combined, .) -> model.yellow
 
+auto %>%
+  filter(treatmentgroup == 0 | treatmentgroup == 4) %>%
+  filter(claimcolour == 'Red') %>%
+  lm(accept_automatic ~ combined, .) -> model.red
+
+stargazer(model.green, model.yellow, model.red, header = FALSE, 
+          column.labels = c('Green', 'Yellow', 'Red'))
+```
+
+# Question 7
+
+```{r question-7, echo = FALSE, results='asis'}
+
+```
