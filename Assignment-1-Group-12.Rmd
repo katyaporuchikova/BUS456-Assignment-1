@@ -106,7 +106,10 @@ auto %>%
 
 # Question 3
 
-*Put in here*
+When we look at the results of the statistical test in the Table 5, only four treatment variables and “privatefinanced” are statistically significant. Therefore we can say that the groups are well randomized (balanced) in terms of the other variables. 
+As to the four treatment variables, it is natural that the means of variables are statistically different between groups. They are designed to take the form of 1 in a certain treatment group, and take the form of 0 in all the other groups. Therefore, the mean will be 1 in one specific group, and 0 in the other groups, which will be considered a big difference. However, this is the intended result, so we can ignore these variables when we think about whether our groups are well-balanced or not.
+The only variable to be considered in the analysis is “privatefinanced.” We need to control this variable when we run regressions. 
+Overall, we can take away from the balance table that treatment groups and the control group are well balanced in terms of variables, and they will not be likely to cause problems in the following analysis except "privatefinanced."
 
 ```{r question-3, echo = FALSE, results='asis'}
 auto %>% 
