@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.21)  1 OCT 2022 20:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.21)  3 OCT 2022 10:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -372,6 +372,9 @@ File: l3backend-pdftex.def 2022-08-30 L3 backend support: PDF output (pdfTeX)
 
 LaTeX Warning: Label `' multiply defined.
 
+
+LaTeX Warning: Label `' multiply defined.
+
 )
 \openout1 = `Assignment-1-Group-12.aux'.
 
@@ -470,17 +473,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {c:/Users/steef/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 119.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 124.
 (c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 198.
+(Font)              <10> on input line 203.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 198.
+(Font)              <7> on input line 203.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 198.
-[3] [4] [5] (./Assignment-1-Group-12.aux)
+(Font)              <5> on input line 203.
+[3] [4] [5] [6] (./Assignment-1-Group-12.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -488,18 +491,18 @@ Package rerunfilecheck Info: File `Assignment-1-Group-12.out' has not changed.
 (rerunfilecheck)             Checksum: 1F93E0068BB783D1085F99AF9C27546C;679.
  ) 
 Here is how much of TeX's memory you used:
- 11235 strings out of 477035
- 176085 string characters out of 5826726
- 529198 words of memory out of 5000000
+ 11237 strings out of 477035
+ 176098 string characters out of 5826726
+ 534198 words of memory out of 5000000
  32166 multiletter control sequences out of 15000+600000
  516128 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  72i,10n,77p,384b,548s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/steef/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on Assignment-1-Group-12.pdf (5 pages, 204502 bytes).
+Output written on Assignment-1-Group-12.pdf (6 pages, 206489 bytes).
 PDF statistics:
- 137 PDF objects out of 1000 (max. 8388607)
- 106 compressed objects within 2 object streams
- 27 named destinations out of 1000 (max. 500000)
+ 142 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
  57 words of extra memory for PDF output out of 10000 (max. 10000000)
 

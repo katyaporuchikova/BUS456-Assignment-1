@@ -36,6 +36,8 @@ auto <- read.csv('automated_anonymous.csv')
 
 # Question 1
 
+Table 1 shows the frequency of the claimcolour: Green claim is 5674, Red is 1492, Yellow is 13190. Table 2 presents the the insurance type, where auto is 7562, life is 2305, other is 35, property is 5865, travel is 4589.
+
 ```{r question-1, echo = FALSE}
 # Transform to factor variables
 claiminternalnumber <- as.data.frame(auto[, 1])
@@ -171,5 +173,13 @@ stargazer(model.green, model.yellow, model.red, header = FALSE,
 # Question 7
 
 ```{r question-7, echo = FALSE, results='asis'}
+# Transform to factors 
+auto$accept_automatic <- as.factor(auto$accept_automatic)
 
+# Logit regression
+logit.model <- glm(accept_automatic ~ claimcolour + treatmentgroup + 
+                     insurancetype + privatefinanced, auto, 
+                   family = 'binomial')
+
+stargazer(logit.model, header = FALSE)
 ```
