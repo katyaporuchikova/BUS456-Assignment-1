@@ -160,6 +160,12 @@ linear.model.w.controls <-
        combined + insurancetype + red + green + privatefinanced, auto)
 stargazer(linear.model, linear.model.w.controls, header = FALSE,
           title = 'Regression output')
+
+summary(linear.model) -> lms
+summary(linear.model.w.controls) -> lmwcs
+
+print(paste('p-value of social.norm, model 1:',lms$coefficients[[19]]))
+print(paste('p-value of social.norm, model 2:',lmwcs$coefficients[[40]]))
 ```
 
 # Question 6
