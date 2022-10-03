@@ -7,7 +7,6 @@ author: |
         | Ekaterina Poruchikova - s222650
         | Jhih-Jiuan Cheng - s222648
         | Shuta Yamada - s222422
-        | Maximilian Sammeer - s222688
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
@@ -23,6 +22,9 @@ library(stargazer) # Pretty statistics output
 library(purrr) # Iterations
 library(dplyr) 
 library(scales) # Turn decimals in %
+library(vtable) # p.vals
+library(pROC) # AUC
+library(caret) # ConfusionMatrix
 ```
 
 
@@ -50,9 +52,12 @@ auto[, -1] %>%
 rm(claiminternalnumber)
 
 knitr::kable(t(table(auto$claimcolour)),
-             caption = 'Frequency of the claim colour')
+             caption = 'Frequency of the claim colour') %>%
+  kable_styling(latex_options = 'hold_position')  
+
 knitr::kable(t(table(auto$insurancetype)),
-             caption = 'Frequency of the insurance type')
+             caption = 'Frequency of the insurance type') %>%
+  kable_styling(latex_options = 'hold_position')  
 
 # Find insurance claims with empty insurance types
 empty.insurance.type <-
@@ -66,24 +71,26 @@ print(paste(
 auto <- auto[-c(17857, 18515), ]
 ```
 
-**Comment on question 1**
 
 # Question 2
+
+Table 3 presents the fraction of claims by colour, while Table 4 provides the breakdown by claim colour and insurance type. In the green claim color other has the highest share, while the second largest category is property insurance. In the yellow category most prominent are life and travel insurance policies. At the same time red claim color is most common in the travel category. However, the travel has the lowest green claim color, other and property have two of the lowest values in yellow category, while auto has the lowest value in red. Therefore it can be concluded that travel is the least likely category to be suitable for automatic evaluation.
+
+
 
 ```{r question-2, echo = FALSE}
 auto$green <- ifelse(auto$claimcolour == 'Green', 1, 0)
 auto$yellow <- ifelse(auto$claimcolour == 'Yellow', 1, 0)
 auto$red <- ifelse(auto$claimcolour == 'Red', 1, 0)
 
-# EXCLUDE THE OTHER CATEGORY *************************************************************************
-
-auto %>% # How to label as percentages? *******************************************************
+auto %>% 
   summarise(
     green = mean(green),
     yellow = mean(yellow),
     red = mean(red)
   ) %>%
-  knitr::kable(caption = 'Percentage of claim color')
+  knitr::kable(caption = 'Percentage of claim color') %>%
+  kable_styling(latex_options = 'hold_position')
 
 auto %>% 
   group_by(insurancetype) %>%
@@ -92,32 +99,31 @@ auto %>%
     yellow = mean(yellow),
     red = mean(red)
   ) %>%
-  knitr::kable(caption = 'Percentage of claim color by insurance type')
+  knitr::kable(caption = 'Percentage of claim color by insurance type') %>%
+  kable_styling(latex_options = 'hold_position')
 ```
 
 # Question 3
 
+Table 5 demonstrates that different groups have different means. The acceptance rate is the highest for private financed group. However,others are not significant. that is to say privatefinanced is important variable in treatment group. So we can find if somebody they try to  individually pay for the insurance out of their own pocket probably means it’s more different
+than paid via employer/union/credit card. 
 
-```{r question-3, echo = FALSE}
-auto %>%
-  group_by(treatmentgroup) %>%
-  summarise(
-    green = mean(green),
-    yellow = mean(yellow),
-    red = mean(red),
-    auto = mean(insurancetype == 'auto'),
-    life = mean(insurancetype == 'life'),
-    property = mean(insurancetype == 'property'),
-    travel = mean(insurancetype == 'travel'),
-    other = mean(insurancetype == 'other'),
-    privatefinanced = mean(as.numeric(as.character(privatefinanced)))
-  ) %>%
-  t(.) %>%
-  knitr::kable(caption = 'Title')
-
+```{r question-3, echo = FALSE, results='asis'}
+auto %>% 
+  select(-c(green, yellow, red, accept_automatic)) %>% 
+  sumtable(group = "treatmentgroup", 
+           summ = list(c('notNA(x)','mean(x)')),
+           summ.names = list(c('N','Mean')), 
+           group.test = T, out = 'latex',
+           title = 'Balance table')
 ```
 
 # Question 4
+
+Table 6 presents the regression output. In the first model the constant term is positive and statistically significant (at 1% level). From this result, we can estimate that without treatments, customers have a general tendency to accept automated claim procedures. If we think about the fact that over 80% of customers have either green or yellow claim color, this result makes intuitive sense.
+All treatment variables have positive coefficients. However, among four treatment variables, only social norm treatment and combined treatment are statistically significant. The P-value of social norm treatment is below 5% significance level, and that of combined treatment is below 1% level. In terms of the result of social norm treatment, it aligns with the theory of reciprocity (conditional cooperation). Although customers cannot observe how other customers behave in this experiment, the information about others’ pro-social behaviors (accepting automated procedures) might have affected their choices.
+As to combined treatment, it has a larger coefficient than the social norm treatment. In addition to the effects of social norm treatment, simplification might reduce the cognitive efforts of customers and contribute to increase the rate of acceptance.
+
 
 ```{r question-4, echo = FALSE}
 # Create 4 dummy variables
@@ -141,14 +147,26 @@ linear.model <-
 
 # Question 5
 
+In the second regression in the Table 6, the coefficient of the variable “privatefinanced” is negative and statistically significant (1% level). Thus, we can assume that there is a negative correlation between paying expenses on insurance from a personal budget and accepting automated procedures. 
+This can be backed up by Prospect Theory. Since the value function is steeper in the loss domain than in the gain domain, it is difficult for customers paying insurance fees by themselves (loss), to be driven by the utility from being “good” (gain from pro-social behavior, accepting automation). 
+
+
 ```{r question-5, echo = FALSE, results='asis'}
 linear.model.w.controls <-
   lm(accept_automatic ~ simplification + personalization + social.norm + 
        combined + insurancetype + red + green + privatefinanced, auto)
-stargazer(linear.model, linear.model.w.controls, header = FALSE)
+stargazer(linear.model, linear.model.w.controls, header = FALSE,
+          title = 'Regression output')
 ```
 
 # Question 6
+
+In the Table 7 separate regressions by claim color are presented. 
+Combined treatment had the largest effect on the group with the “Yellow” claim color.
+Also, the coefficient is only statistically significant for this group (1% level). 
+However, this might not be the very result the company wanted, because claims labeled “Yellow” require some elements of personal evaluation. 
+Although they can expect an increase in operational/financial efficiency from automation, the effect would not be as big as they expected. They will still need humans to process these claims and the time spent on procedures might not change so significantly. This may damage customer experiences because it kills one of the good features of automated claim procedures for customers. Since automation leads to a reduction of time for procedures, it is natural for customers who accept it to expect getting answers for their claims in a shorter time. This would shift their reference point to evaluate time spent on the procedures: for example, from setting 2-3 days as the origin (reference point) to setting 1 day or several hours as the origin. However, it would take longer than 1 day or several hours if their claims are not very suitable for automation, of which the claim color is “Yellow.” This will not be a problem for customers with the former reference point, but for those who with the latter reference point, it is interpreted as a loss. This will degrade customer experiences and ultimately, may lead to the unwanted result, the loss of customers.
+
 
 ```{r question-6, echo = FALSE, results='asis'}
 auto %>%
@@ -181,5 +199,11 @@ logit.model <- glm(accept_automatic ~ claimcolour + treatmentgroup +
                      insurancetype + privatefinanced, auto, 
                    family = 'binomial')
 
-stargazer(logit.model, header = FALSE)
+stargazer(logit.model, header = FALSE, 
+          title = 'Logistic regression output')
+
+predicted <- predict(logit.model, auto, type = 'response')
+test_roc = roc(auto$accept_automatic ~ predicted, plot = TRUE, print.auc = TRUE)
+summary(predicted) 
+summary(auto$accept_automatic)
 ```
