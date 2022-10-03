@@ -101,12 +101,12 @@ auto %>%
   ) %>%
   knitr::kable(caption = 'Percentage of claim color by insurance type') %>%
   kable_styling(latex_options = 'hold_position')
+
 ```
 
 # Question 3
 
-Table 5 demonstrates that different groups have different means. The acceptance rate is the highest for private financed group. However,others are not significant. that is to say privatefinanced is important variable in treatment group. So we can find if somebody they try to  individually pay for the insurance out of their own pocket probably means it’s more different
-than paid via employer/union/credit card. 
+*Put in here*
 
 ```{r question-3, echo = FALSE, results='asis'}
 auto %>% 
@@ -149,7 +149,7 @@ linear.model <-
 
 In the second regression in the Table 6, the coefficient of the variable “privatefinanced” is negative and statistically significant (1% level). Thus, we can assume that there is a negative correlation between paying expenses on insurance from a personal budget and accepting automated procedures. 
 This can be backed up by Prospect Theory. Since the value function is steeper in the loss domain than in the gain domain, it is difficult for customers paying insurance fees by themselves (loss), to be driven by the utility from being “good” (gain from pro-social behavior, accepting automation). 
-
+The change in the social norm group coefficient and its significance can most likely be attributed to a random chance as the sign of the coefficient remains the same and the value of the coefficient decreased only slightly and p-value changed from 3% to 5%. Therefore, the interpretation would not change drastically. 
 
 ```{r question-5, echo = FALSE, results='asis'}
 linear.model.w.controls <-
@@ -185,18 +185,21 @@ auto %>%
   lm(accept_automatic ~ combined, .) -> model.red
 
 stargazer(model.green, model.yellow, model.red, header = FALSE, 
-          column.labels = c('Green', 'Yellow', 'Red'))
+          column.labels = c('Green', 'Yellow', 'Red'),
+          title = 'Regressions by claim color')
 ```
 
 # Question 7
+
+As an additional analysis we ran a logistic regression to predict the automatic acceptance. The results of the regression are presented in the Table 8. The same variables as in the linear regression in Table 6 were found significant. However, due to larger presentce of automatic asseptances in the sample, as demonstrated by Table 9, the predictions made by the model were exclusively automatic acceptances. Therefore the model accuracy suffered, as demonstrated by the ROC figure. 
 
 ```{r question-7, echo = FALSE, results='asis'}
 # Transform to factors 
 auto$accept_automatic <- as.factor(auto$accept_automatic)
 
 # Logit regression
-logit.model <- glm(accept_automatic ~ claimcolour + treatmentgroup + 
-                     insurancetype + privatefinanced, auto, 
+logit.model <- glm(accept_automatic ~ simplification + personalization + social.norm + 
+       combined + insurancetype + red + green + privatefinanced, auto, 
                    family = 'binomial')
 
 stargazer(logit.model, header = FALSE, 
@@ -204,6 +207,11 @@ stargazer(logit.model, header = FALSE,
 
 predicted <- predict(logit.model, auto, type = 'response')
 test_roc = roc(auto$accept_automatic ~ predicted, plot = TRUE, print.auc = TRUE)
-summary(predicted) 
-summary(auto$accept_automatic)
+
+
+knitr::kable(table(auto$accept_automatic),
+             caption = 'Summary statistics of the logit predictions') %>%
+  kable_styling(latex_options = 'hold_position') 
+
+print(paste('Lowest probability prediction is',round(min(predicted),2)))
 ```
